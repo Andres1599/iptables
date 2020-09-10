@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 });
 
 app.use(cors());
-app.use('/api/', require('./router')(app));
+app.use('/api', require('./routes')(app));
 
 app.listen(port, () => {
     console.log("Servidor iniciado en el puerto: " + port);
