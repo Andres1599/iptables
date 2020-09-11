@@ -3,7 +3,13 @@ const child = require('child_process')
 module.exports = (app) => {
     return {
         getIptable: (req, res) => {
-            getIptables(res)
+            getIptablesInput(res)
+        },
+        getIptableOut: (req, res) => {
+            getIptablesOutput(res)
+        },
+        getIptableFor: (req, res) => {
+            getIptablesForward(res)
         },
         getInterface: (req, res) => {
             getInterfaces(res)
@@ -11,9 +17,60 @@ module.exports = (app) => {
     }
 }
 
-function getIptables(res) {
+function getIptablesInput(res) {
     try {
-        child.exec('iptables -L', (error, stdout, stderr) => {
+        child.exec('iptables -L INPUT --line-numbers', (error, stdout, stderr) => {
+            if (error) {
+                res.status(500).send({
+                    message: 'Internal server error!',
+                    error
+                })
+            }
+
+            res.status(200).send({
+                data: {
+                    stdout: stdout.split('\n'),
+                    stderr
+                }
+            })
+        })
+    } catch (error) {
+        res.status(500).send({
+            message: 'Internal server error!',
+            error
+        })
+    }
+}
+
+
+function getIptablesOutput(res) {
+    try {
+        child.exec('iptables -L OUTPUT --line-numbers', (error, stdout, stderr) => {
+            if (error) {
+                res.status(500).send({
+                    message: 'Internal server error!',
+                    error
+                })
+            }
+
+            res.status(200).send({
+                data: {
+                    stdout: stdout.split('\n'),
+                    stderr
+                }
+            })
+        })
+    } catch (error) {
+        res.status(500).send({
+            message: 'Internal server error!',
+            error
+        })
+    }
+}
+
+function getIptablesForward(res) {
+    try {
+        child.exec('iptables -L FORWARD --line-numbers', (error, stdout, stderr) => {
             if (error) {
                 res.status(500).send({
                     message: 'Internal server error!',

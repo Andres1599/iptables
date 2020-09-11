@@ -13,6 +13,7 @@ function create(req, res) {
         const data = req.body
 
         let command;
+
         if (data.chain != 'OUTPUT') {
             command = 'iptables -A ' + data.chain +
             ' -i ' + data.interfas + 
