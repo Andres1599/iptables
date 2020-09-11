@@ -23,7 +23,7 @@ function getIptables(res) {
 
             res.status(200).send({
                 data: {
-                    stdout,
+                    stdout: stdout.split('\n'),
                     stderr
                 }
             })
